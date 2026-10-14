@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kurzspiel-Längen</title>
+  <meta name="description" content="Deine Chip- und Pitch-Längen pro Schläger bei 7:30, 9 und 11 Uhr.">
+  <meta name="theme-color" content="#1f5f3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Kurzspiel">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Kurzspiel-Längen</h1>
+    <button id="modeBtn" class="btn ghost" type="button">Bearbeiten</button>
+  </header>
+
+  <main>
+    <section id="view">
+      <div class="table-wrap">
+        <table class="lengths">
+          <thead>
+            <tr>
+              <th scope="col">Schläger</th>
+              <th scope="col"><span class="clock" data-pos="730"></span>7:30</th>
+              <th scope="col"><span class="clock" data-pos="900"></span>9:00</th>
+              <th scope="col"><span class="clock" data-pos="1100"></span>11:00</th>
+            </tr>
+          </thead>
+          <tbody id="viewBody"></tbody>
+        </table>
+      </div>
+      <p class="hint">Längen in Metern. Uhrzeit = wie weit du ausholst (linker Arm als Uhrzeiger).</p>
+    </section>
+
+    <section id="edit" hidden>
+      <p class="hint">Trage deine Längen in Metern ein. Alles wird sofort auf diesem Gerät gespeichert.</p>
+      <ul id="editList" class="edit-list"></ul>
+      <button id="addBtn" class="btn primary wide" type="button">+ Schläger hinzufügen</button>
+
+      <details class="backup">
+        <summary>Sichern &amp; Wiederherstellen</summary>
+        <p class="hint">Die Daten liegen nur auf diesem Gerät. Speichere ab und zu eine Sicherung, z. B. bevor du das Handy wechselst.</p>
+        <div class="row">
+          <button id="exportBtn" class="btn" type="button">Sicherung speichern</button>
+          <label class="btn">Sicherung laden<input id="importInput" type="file" accept="application/json,.json" hidden></label>
+        </div>
+        <button id="resetBtn" class="btn danger wide" type="button">Alles auf Standard zurücksetzen</button>
+      </details>
+    </section>
+  </main>
+
+  <template id="editItemTpl">
+    <li class="edit-item">
+      <div class="edit-head">
+        <input class="name" type="text" maxlength="20" placeholder="Name, z. B. SW 56°" aria-label="Schlägername">
+        <button class="icon up" type="button" aria-label="Nach oben">▲</button>
+        <button class="icon down" type="button" aria-label="Nach unten">▼</button>
+        <button class="icon del" type="button" aria-label="Löschen">✕</button>
+      </div>
+      <div class="edit-vals">
+        <label>7:30<input class="v730" type="text" inputmode="decimal" autocomplete="off" placeholder="m"></label>
+        <label>9:00<input class="v900" type="text" inputmode="decimal" autocomplete="off" placeholder="m"></label>
+        <label>11:00<input class="v1100" type="text" inputmode="decimal" autocomplete="off" placeholder="m"></label>
+      </div>
+    </li>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

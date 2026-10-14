@@ -1,0 +1,16 @@
+{
+  "name": "Kurzspiel-Längen",
+  "short_name": "Kurzspiel",
+  "description": "Chip- und Pitch-Längen pro Schläger bei 7:30, 9 und 11 Uhr.",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f2",
+  "theme_color": "#1f5f3a",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
