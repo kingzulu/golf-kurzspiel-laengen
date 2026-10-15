@@ -17,6 +17,7 @@ let package = Package(
             name: "Kurzspiel",
             targets: ["AppModule"],
             bundleIdentifier: "de.kingzulu.kurzspiel",
+            teamIdentifier: "2XUJFFJ4X2",
             displayVersion: "1.0",
             bundleVersion: "1",
             appIcon: .asset("AppIcon"),
