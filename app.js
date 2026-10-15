@@ -3,11 +3,17 @@
 
   var STORAGE_KEY = "kurzspiel-laengen-v1";
   var POSITIONS = ["730", "900", "1100"];
+  // "v" = normales Schlägerblatt, "o" = geöffnetes Schlägerblatt
+  var FACES = ["v", "o"];
 
   function defaultClubs() {
     return ["LW", "SW", "GW", "PW", "9er"].map(function (name) {
-      return { name: name, v730: null, v900: null, v1100: null };
+      return emptyClub(name);
     });
+  }
+
+  function emptyClub(name) {
+    return { name: name, v730: null, v900: null, v1100: null, o730: null, o900: null, o1100: null };
   }
 
   function load() {
@@ -38,7 +44,10 @@
       name: String((c && c.name) || "").slice(0, 20),
       v730: toNum(c && c.v730),
       v900: toNum(c && c.v900),
-      v1100: toNum(c && c.v1100)
+      v1100: toNum(c && c.v1100),
+      o730: toNum(c && c.o730),
+      o900: toNum(c && c.o900),
+      o1100: toNum(c && c.o1100)
     };
   }
 
@@ -70,13 +79,25 @@
       return;
     }
     shown.forEach(function (c) {
+      FACES.forEach(function (f) { viewBody.appendChild(viewRow(c, f)); });
+    });
+  }
+
+  function viewRow(c, f) {
       var tr = document.createElement("tr");
       var th = document.createElement("td");
       th.textContent = c.name;
+      if (f === "o") {
+        tr.className = "open";
+        var tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = "offen";
+        th.appendChild(tag);
+      }
       tr.appendChild(th);
       POSITIONS.forEach(function (p) {
         var td = document.createElement("td");
-        var v = c["v" + p];
+        var v = c[f + p];
         if (v === null) {
           td.className = "empty";
           td.textContent = "–";
@@ -88,8 +109,7 @@
         }
         tr.appendChild(td);
       });
-      viewBody.appendChild(tr);
-    });
+      return tr;
   }
 
   function renderEdit() {
@@ -99,10 +119,13 @@
       var name = li.querySelector(".name");
       name.value = c.name;
       name.addEventListener("input", function () { clubs[i].name = name.value.slice(0, 20); save(); });
-      POSITIONS.forEach(function (p) {
-        var inp = li.querySelector(".v" + p);
-        inp.value = c["v" + p] === null ? "" : fmt(c["v" + p]);
-        inp.addEventListener("input", function () { clubs[i]["v" + p] = toNum(inp.value); save(); });
+      FACES.forEach(function (f) {
+        POSITIONS.forEach(function (p) {
+          var key = f + p;
+          var inp = li.querySelector("." + key);
+          inp.value = c[key] === null ? "" : fmt(c[key]);
+          inp.addEventListener("input", function () { clubs[i][key] = toNum(inp.value); save(); });
+        });
       });
       li.querySelector(".up").disabled = i === 0;
       li.querySelector(".down").disabled = i === clubs.length - 1;
@@ -140,7 +163,7 @@
   modeBtn.addEventListener("click", function () { setMode(!editing); });
 
   document.getElementById("addBtn").addEventListener("click", function () {
-    clubs.push({ name: "", v730: null, v900: null, v1100: null });
+    clubs.push(emptyClub(""));
     save();
     renderEdit();
     var names = editList.querySelectorAll(".name");

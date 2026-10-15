@@ -49,6 +49,9 @@ table.lengths { width: 100%; border-collapse: collapse; font-variant-numeric: ta
 .lengths td:first-child { font-size: 19px; font-weight: 650; }
 .lengths td.empty { color: var(--muted); font-weight: 400; }
 .lengths td small { font-size: 14px; font-weight: 500; color: var(--muted); margin-left: 1px; }
+.lengths tr.open td { border-top-style: dashed; font-size: 22px; padding-top: 10px; padding-bottom: 10px; background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+.lengths tr.open td:first-child { font-size: 15px; }
+.lengths .tag { display: block; font-size: 12px; font-weight: 650; color: var(--accent); }
 .lengths .none td { font-size: 16px; font-weight: 400; color: var(--muted); text-align: center; }
 
 .clock {
@@ -90,7 +93,8 @@ input:focus { outline: 2px solid var(--accent); outline-offset: 0; }
   background: transparent; color: var(--muted); font-size: 14px; cursor: pointer;
 }
 .icon.del { color: var(--danger); }
-.edit-vals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.edit-vals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px; }
+.face-label { margin: 12px 0 0; font-size: 13px; font-weight: 600; color: var(--muted); }
 .edit-vals label { font-size: 13px; color: var(--muted); display: grid; gap: 4px; text-align: center; }
 .edit-vals input { text-align: center; }
 

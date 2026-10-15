@@ -6,6 +6,10 @@ struct Club: Identifiable, Codable, Equatable {
     var v730: Double?
     var v900: Double?
     var v1100: Double?
+    // Längen mit geöffnetem Schlägerblatt
+    var o730: Double?
+    var o900: Double?
+    var o1100: Double?
 
     var hasName: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty
@@ -35,11 +39,28 @@ enum Swing: Int, CaseIterable, Identifiable {
         }
     }
 
-    var keyPath: WritableKeyPath<Club, Double?> {
+    func keyPath(_ face: Face) -> WritableKeyPath<Club, Double?> {
+        switch (self, face) {
+        case (.h730, .square): return \.v730
+        case (.h900, .square): return \.v900
+        case (.h1100, .square): return \.v1100
+        case (.h730, .open): return \.o730
+        case (.h900, .open): return \.o900
+        case (.h1100, .open): return \.o1100
+        }
+    }
+}
+
+/// Normales oder geöffnetes Schlägerblatt.
+enum Face: CaseIterable, Identifiable {
+    case square, open
+
+    var id: Self { self }
+
+    var title: String {
         switch self {
-        case .h730: return \.v730
-        case .h900: return \.v900
-        case .h1100: return \.v1100
+        case .square: return "Normal"
+        case .open: return "Offenes Schlägerblatt"
         }
     }
 }

@@ -79,13 +79,19 @@ private struct ClubSummary: View {
             Text(club.hasName ? club.name : "Ohne Namen")
                 .font(.headline)
                 .foregroundStyle(club.hasName ? Color.primary : Color.secondary)
-            Text(Swing.allCases.map { swing -> String in
-                let value = club[keyPath: swing.keyPath].map(Meters.text) ?? "–"
-                return "\(swing.label): \(value)"
-            }.joined(separator: "  ·  "))
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            ForEach(Face.allCases) { face in
+                Text(summary(face))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
+    }
+
+    private func summary(_ face: Face) -> String {
+        let values = Swing.allCases.map { swing -> String in
+            club[keyPath: swing.keyPath(face)].map(Meters.text) ?? "–"
+        }.joined(separator: " · ")
+        return face == .open ? "offen: \(values)" : values
     }
 }
 
@@ -93,13 +99,17 @@ private struct ClubSummary: View {
 struct ClubEditView: View {
     @Binding var club: Club
     // Eingaben als Text halten, damit "25," beim Tippen nicht verschwindet.
-    @State private var texts: [String]
+    @State private var texts: [Face: [String]]
 
     init(club: Binding<Club>) {
         _club = club
-        _texts = State(initialValue: Swing.allCases.map { swing in
-            club.wrappedValue[keyPath: swing.keyPath].map(Meters.text) ?? ""
-        })
+        var initial: [Face: [String]] = [:]
+        for face in Face.allCases {
+            initial[face] = Swing.allCases.map { swing in
+                club.wrappedValue[keyPath: swing.keyPath(face)].map(Meters.text) ?? ""
+            }
+        }
+        _texts = State(initialValue: initial)
     }
 
     var body: some View {
@@ -108,36 +118,40 @@ struct ClubEditView: View {
                 TextField("z. B. SW 56°", text: $club.name)
                     .autocorrectionDisabled()
             }
-            Section {
-                ForEach(Swing.allCases) { swing in
-                    HStack(spacing: 12) {
-                        ClockIcon(swing: swing)
-                        Text("bis \(swing.label) Uhr")
-                        Spacer()
-                        TextField("–", text: binding(for: swing))
-                            .keyboardType(.decimalPad)
-                            .multilineTextAlignment(.trailing)
-                            .frame(width: 80)
-                        Text("m")
-                            .foregroundStyle(.secondary)
+            ForEach(Face.allCases) { face in
+                Section {
+                    ForEach(Swing.allCases) { swing in
+                        HStack(spacing: 12) {
+                            ClockIcon(swing: swing)
+                            Text("bis \(swing.label) Uhr")
+                            Spacer()
+                            TextField("–", text: binding(for: swing, face: face))
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .frame(width: 80)
+                            Text("m")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                } header: {
+                    Text("\(face.title) – Längen in Metern")
+                } footer: {
+                    if face == .open {
+                        Text("Feld leer lassen, wenn du die Länge noch nicht kennst.")
                     }
                 }
-            } header: {
-                Text("Längen in Metern")
-            } footer: {
-                Text("Feld leer lassen, wenn du die Länge noch nicht kennst.")
             }
         }
         .navigationTitle(club.hasName ? club.name : "Neuer Schläger")
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    private func binding(for swing: Swing) -> Binding<String> {
+    private func binding(for swing: Swing, face: Face) -> Binding<String> {
         Binding(
-            get: { texts[swing.rawValue] },
+            get: { texts[face]?[swing.rawValue] ?? "" },
             set: { newValue in
-                texts[swing.rawValue] = newValue
-                club[keyPath: swing.keyPath] = Meters.parse(newValue)
+                texts[face, default: ["", "", ""]][swing.rawValue] = newValue
+                club[keyPath: swing.keyPath(face)] = Meters.parse(newValue)
             }
         )
     }

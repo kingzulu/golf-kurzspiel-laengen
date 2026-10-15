@@ -23,7 +23,9 @@ struct ContentView: View {
                     } else {
                         ForEach(visibleClubs) { club in
                             Divider()
-                            ClubRow(club: club)
+                            ClubRow(club: club, face: .square)
+                            Divider().padding(.leading, 14)
+                            ClubRow(club: club, face: .open)
                         }
                     }
                 }
@@ -76,22 +78,40 @@ private struct HeaderRow: View {
 
 private struct ClubRow: View {
     let club: Club
+    let face: Face
 
     var body: some View {
         HStack(spacing: 0) {
-            Text(club.name)
-                .font(.title3.weight(.semibold))
+            nameLabel
                 .lineLimit(2)
                 .minimumScaleFactor(0.7)
                 .frame(width: 96, alignment: .leading)
             ForEach(Swing.allCases) { swing in
-                valueText(club[keyPath: swing.keyPath])
+                valueText(club[keyPath: swing.keyPath(face)])
                     .frame(maxWidth: .infinity)
             }
         }
         .padding(.horizontal, 14)
-        .padding(.vertical, 16)
+        .padding(.vertical, face == .square ? 16 : 12)
+        .background(face == .open ? Color.accentColor.opacity(0.05) : Color.clear)
         .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private var nameLabel: some View {
+        switch face {
+        case .square:
+            Text(club.name)
+                .font(.title3.weight(.semibold))
+        case .open:
+            VStack(alignment: .leading, spacing: 0) {
+                Text(club.name)
+                    .font(.subheadline.weight(.semibold))
+                Text("offen")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Color.accentColor)
+            }
+        }
     }
 
     private func valueText(_ value: Double?) -> Text {

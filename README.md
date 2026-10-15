@@ -1,6 +1,6 @@
 # Kurzspiel-Längen
 
-Eine kleine App fürs Handy: Für jeden Kurzspiel-Schläger im Bag (z. B. LW, SW, GW, PW, 9er) stehen die Längen bei einer Ausholbewegung bis **7:30**, **9:00** und **11:00 Uhr** in einer Tabelle, gut ablesbar auf dem Platz.
+Eine kleine App fürs Handy: Für jeden Kurzspiel-Schläger im Bag (z. B. LW, SW, GW, PW, 9er) stehen die Längen bei einer Ausholbewegung bis **7:30**, **9:00** und **11:00 Uhr** in einer Tabelle, gut ablesbar auf dem Platz. Zu jedem Schläger gibt es zusätzlich eine Zeile „offen“ für das geöffnete Schlägerblatt.
 
 Es gibt zwei Varianten mit derselben Funktion:
 

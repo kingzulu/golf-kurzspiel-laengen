@@ -1,4 +1,4 @@
-var CACHE = "kurzspiel-v1";
+var CACHE = "kurzspiel-v2";
 var FILES = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon.svg", "icon-180.png", "icon-512.png"];
 
 self.addEventListener("install", function (e) {
