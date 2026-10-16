@@ -1,5 +1,5 @@
-var CACHE = "kurzspiel-v2";
-var FILES = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon.svg", "icon-180.png", "icon-512.png"];
+var CACHE = "kurzspiel-v3";
+var FILES = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon-180.png", "icon-512.png", "zg-logo.png"];
 
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(FILES); }));

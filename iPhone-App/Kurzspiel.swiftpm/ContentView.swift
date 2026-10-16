@@ -43,6 +43,9 @@ struct ContentView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Kurzspiel-Längen")
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    ZGLogoBadge()
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button("Bearbeiten") { showEditor = true }
                 }
@@ -52,6 +55,24 @@ struct ContentView: View {
                     .environmentObject(store)
             }
         }
+    }
+}
+
+/// Das ZG-Logo von zulugolf.de auf dunklem Grund, damit der weiße Teil
+/// auch im hellen Modus sichtbar bleibt.
+private struct ZGLogoBadge: View {
+    var body: some View {
+        Image("ZGLogo")
+            .resizable()
+            .scaledToFit()
+            .frame(height: 20)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 4)
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(Color(red: 27 / 255, green: 34 / 255, blue: 51 / 255))
+            )
+            .accessibilityLabel("Zulu Golf")
     }
 }
 
