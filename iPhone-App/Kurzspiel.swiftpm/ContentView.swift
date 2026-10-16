@@ -48,8 +48,13 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .primaryAction) {
                     Button("Bearbeiten") { showEditor = true }
+                        .tint(.white)
                 }
             }
+            // Navy wie auf zulugolf.de, damit das ZG-Logo darauf schwebt
+            .toolbarBackground(Color.zuluNavy, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showEditor) {
                 EditView()
                     .environmentObject(store)
@@ -58,20 +63,18 @@ struct ContentView: View {
     }
 }
 
-/// Das ZG-Logo von zulugolf.de auf dunklem Grund, damit der weiße Teil
-/// auch im hellen Modus sichtbar bleibt.
+extension Color {
+    /// Navy der Homepage zulugolf.de (#1b2233)
+    static let zuluNavy = Color(red: 27 / 255, green: 34 / 255, blue: 51 / 255)
+}
+
+/// Das ZG-Logo von zulugolf.de in der Kopfzeile.
 private struct ZGLogoBadge: View {
     var body: some View {
         Image("ZGLogo")
             .resizable()
             .scaledToFit()
-            .frame(height: 20)
-            .padding(.horizontal, 6)
-            .padding(.vertical, 4)
-            .background(
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(Color(red: 27 / 255, green: 34 / 255, blue: 51 / 255))
-            )
+            .frame(height: 24)
             .accessibilityLabel("Zulu Golf")
     }
 }

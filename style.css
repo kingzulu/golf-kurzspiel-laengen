@@ -34,12 +34,11 @@ body {
   position: sticky; top: 0; z-index: 2;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
-  background: var(--accent); color: #fff;
+  background: #1b2233; color: #fff;
 }
-@media (prefers-color-scheme: dark) { .top { background: #163f27; } }
 .top h1 { margin: 0; font-size: 20px; font-weight: 650; display: flex; align-items: center; gap: 10px; }
-.brand { display: inline-flex; padding: 4px 6px; border-radius: 6px; background: #1b2233; }
-.brand img { height: 20px; width: auto; display: block; }
+.brand { display: inline-flex; }
+.brand img { height: 26px; width: auto; display: block; }
 main { max-width: 640px; margin: 0 auto; padding: 16px; }
 
 .table-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
