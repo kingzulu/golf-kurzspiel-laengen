@@ -82,10 +82,14 @@ extension Color {
 /// Das ZG-Logo von zulugolf.de in der Kopfzeile.
 private struct ZGLogoBadge: View {
     var body: some View {
+        // Feste Breite und Originalfarben: In der Kopfzeile wurde das Logo
+        // neben dem Titel sonst auf Breite null geschrumpft bzw. eingefärbt.
         Image("ZGLogo")
+            .renderingMode(.original)
             .resizable()
-            .scaledToFit()
-            .frame(height: 24)
+            .aspectRatio(480.0 / 306.0, contentMode: .fit)
+            .frame(width: 38, height: 24)
+            .fixedSize()
             .accessibilityLabel("Zulu Golf")
     }
 }
