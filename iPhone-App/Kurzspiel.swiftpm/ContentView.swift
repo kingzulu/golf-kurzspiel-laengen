@@ -133,7 +133,7 @@ private struct ClubRow: View {
                     .font(.subheadline.weight(.semibold))
                 Text("offen")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(Color("ZuluBlue"))
             }
         }
     }
