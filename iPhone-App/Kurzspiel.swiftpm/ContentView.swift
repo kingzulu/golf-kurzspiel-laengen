@@ -41,16 +41,10 @@ struct ContentView: View {
                     .padding()
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Kurzspiel-Längen")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    ZGLogoBadge()
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Bearbeiten") { showEditor = true }
-                        .tint(.white)
-                }
-            }
+            // Titel selbst neben das Logo in die Navy-Leiste setzen (wie in der
+            // Web-App); der große Standardtitel war auf dem iPhone nicht zu sehen.
+            .navigationBarTitleDisplayMode(.inline)
+            .modifier(BrandToolbar { showEditor = true })
             // Navy wie auf zulugolf.de, damit das ZG-Logo darauf schwebt
             .toolbarBackground(Color.zuluNavy, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -63,6 +57,48 @@ struct ContentView: View {
     }
 }
 
+/// Logo und Titel links, „Bearbeiten“ rechts in der Navy-Leiste.
+private struct BrandToolbar: ViewModifier {
+    let onEdit: () -> Void
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            // Ab iOS 26 legt das System sonst einen Knopf-Rahmen (Glas) um
+            // Logo und Titel; der gehört nur an „Bearbeiten“.
+            content.toolbar {
+                ToolbarItem(placement: .navigationBarLeading) { BrandTitle() }
+                    .sharedBackgroundVisibility(.hidden)
+                ToolbarItem(placement: .primaryAction) { editButton }
+            }
+        } else {
+            content.toolbar {
+                ToolbarItem(placement: .navigationBarLeading) { BrandTitle() }
+                ToolbarItem(placement: .primaryAction) { editButton }
+            }
+        }
+    }
+
+    private var editButton: some View {
+        Button("Bearbeiten", action: onEdit)
+            .tint(.white)
+    }
+}
+
+private struct BrandTitle: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            ZGLogoBadge()
+            Text("Kurzspiel-Längen")
+                .font(.headline)
+                .foregroundColor(.white)
+                .lineLimit(1)
+                .fixedSize()
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
+    }
+}
+
 extension Color {
     /// Navy der Homepage zulugolf.de (#1b2233)
     static let zuluNavy = Color(red: 27 / 255, green: 34 / 255, blue: 51 / 255)
@@ -71,10 +107,14 @@ extension Color {
 /// Das ZG-Logo von zulugolf.de in der Kopfzeile.
 private struct ZGLogoBadge: View {
     var body: some View {
+        // Feste Breite und Originalfarben: In der Kopfzeile wurde das Logo
+        // neben dem Titel sonst auf Breite null geschrumpft bzw. eingefärbt.
         Image("ZGLogo")
+            .renderingMode(.original)
             .resizable()
-            .scaledToFit()
-            .frame(height: 24)
+            .aspectRatio(480.0 / 306.0, contentMode: .fit)
+            .frame(width: 38, height: 24)
+            .fixedSize()
             .accessibilityLabel("Zulu Golf")
     }
 }
