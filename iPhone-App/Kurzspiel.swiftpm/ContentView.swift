@@ -44,24 +44,7 @@ struct ContentView: View {
             // Titel selbst neben das Logo in die Navy-Leiste setzen (wie in der
             // Web-App); der große Standardtitel war auf dem iPhone nicht zu sehen.
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack(spacing: 10) {
-                        ZGLogoBadge()
-                        Text("Kurzspiel-Längen")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .lineLimit(1)
-                            .fixedSize()
-                    }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityAddTraits(.isHeader)
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Bearbeiten") { showEditor = true }
-                        .tint(.white)
-                }
-            }
+            .modifier(BrandToolbar { showEditor = true })
             // Navy wie auf zulugolf.de, damit das ZG-Logo darauf schwebt
             .toolbarBackground(Color.zuluNavy, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -71,6 +54,48 @@ struct ContentView: View {
                     .environmentObject(store)
             }
         }
+    }
+}
+
+/// Logo und Titel links, „Bearbeiten“ rechts in der Navy-Leiste.
+private struct BrandToolbar: ViewModifier {
+    let onEdit: () -> Void
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            // Ab iOS 26 legt das System sonst einen Knopf-Rahmen (Glas) um
+            // Logo und Titel; der gehört nur an „Bearbeiten“.
+            content.toolbar {
+                ToolbarItem(placement: .navigationBarLeading) { BrandTitle() }
+                    .sharedBackgroundVisibility(.hidden)
+                ToolbarItem(placement: .primaryAction) { editButton }
+            }
+        } else {
+            content.toolbar {
+                ToolbarItem(placement: .navigationBarLeading) { BrandTitle() }
+                ToolbarItem(placement: .primaryAction) { editButton }
+            }
+        }
+    }
+
+    private var editButton: some View {
+        Button("Bearbeiten", action: onEdit)
+            .tint(.white)
+    }
+}
+
+private struct BrandTitle: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            ZGLogoBadge()
+            Text("Kurzspiel-Längen")
+                .font(.headline)
+                .foregroundColor(.white)
+                .lineLimit(1)
+                .fixedSize()
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
     }
 }
 
