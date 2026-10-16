@@ -41,10 +41,21 @@ struct ContentView: View {
                     .padding()
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Kurzspiel-Längen")
+            // Titel selbst neben das Logo in die Navy-Leiste setzen (wie in der
+            // Web-App); der große Standardtitel war auf dem iPhone nicht zu sehen.
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    ZGLogoBadge()
+                    HStack(spacing: 10) {
+                        ZGLogoBadge()
+                        Text("Kurzspiel-Längen")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .lineLimit(1)
+                            .fixedSize()
+                    }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
                 }
                 ToolbarItem(placement: .primaryAction) {
                     Button("Bearbeiten") { showEditor = true }
