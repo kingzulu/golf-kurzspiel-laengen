@@ -4,6 +4,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject private var store: ClubStore
     @State private var showEditor = false
+    @State private var showAbout = false
 
     private var visibleClubs: [Club] {
         store.clubs.filter(\.hasName)
@@ -44,7 +45,7 @@ struct ContentView: View {
             // Titel selbst neben das Logo in die Navy-Leiste setzen (wie in der
             // Web-App); der große Standardtitel war auf dem iPhone nicht zu sehen.
             .navigationBarTitleDisplayMode(.inline)
-            .modifier(BrandToolbar { showEditor = true })
+            .modifier(BrandToolbar(onBrand: { showAbout = true }, onEdit: { showEditor = true }))
             // Navy wie auf zulugolf.de, damit das ZG-Logo darauf schwebt
             .toolbarBackground(Color.zuluNavy, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -53,12 +54,16 @@ struct ContentView: View {
                 EditView()
                     .environmentObject(store)
             }
+            .sheet(isPresented: $showAbout) {
+                AboutView()
+            }
         }
     }
 }
 
 /// Logo und Titel links, „Bearbeiten“ rechts in der Navy-Leiste.
 private struct BrandToolbar: ViewModifier {
+    let onBrand: () -> Void
     let onEdit: () -> Void
 
     func body(content: Content) -> some View {
@@ -66,16 +71,23 @@ private struct BrandToolbar: ViewModifier {
             // Ab iOS 26 legt das System sonst einen Knopf-Rahmen (Glas) um
             // Logo und Titel; der gehört nur an „Bearbeiten“.
             content.toolbar {
-                ToolbarItem(placement: .navigationBarLeading) { BrandTitle() }
+                ToolbarItem(placement: .navigationBarLeading) { brandButton }
                     .sharedBackgroundVisibility(.hidden)
                 ToolbarItem(placement: .primaryAction) { editButton }
             }
         } else {
             content.toolbar {
-                ToolbarItem(placement: .navigationBarLeading) { BrandTitle() }
+                ToolbarItem(placement: .navigationBarLeading) { brandButton }
                 ToolbarItem(placement: .primaryAction) { editButton }
             }
         }
+    }
+
+    // Tipp auf Logo oder Titel öffnet die Info-Seite zu Zulu Golf.
+    private var brandButton: some View {
+        Button(action: onBrand) { BrandTitle() }
+            .buttonStyle(.plain)
+            .accessibilityHint("Zeigt Infos zu Zulu Golf")
     }
 
     private var editButton: some View {
@@ -102,6 +114,8 @@ private struct BrandTitle: View {
 extension Color {
     /// Navy der Homepage zulugolf.de (#1b2233)
     static let zuluNavy = Color(red: 27 / 255, green: 34 / 255, blue: 51 / 255)
+    /// Gelb aus dem ZG-Logo (#ffc20a)
+    static let zuluYellow = Color(red: 255 / 255, green: 194 / 255, blue: 10 / 255)
 }
 
 /// Das ZG-Logo von zulugolf.de in der Kopfzeile.
