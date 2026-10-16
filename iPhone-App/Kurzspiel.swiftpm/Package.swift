@@ -14,7 +14,7 @@ let package = Package(
     ],
     products: [
         .iOSApplication(
-            name: "Kurzspiel",
+            name: "ZG-Kurzspiel",
             targets: ["AppModule"],
             bundleIdentifier: "de.kingzulu.kurzspiel",
             teamIdentifier: "2XUJFFJ4X2",

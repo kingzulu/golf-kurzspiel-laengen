@@ -1,6 +1,6 @@
 {
   "name": "Kurzspiel-Längen",
-  "short_name": "Kurzspiel",
+  "short_name": "ZG-Kurzspiel",
   "description": "Chip- und Pitch-Längen pro Schläger bei 7:30, 9 und 11 Uhr.",
   "lang": "de",
   "start_url": "./",
