@@ -10,7 +10,7 @@ struct ClockIcon: View {
             Circle()
                 .stroke(Color.secondary, lineWidth: 2)
             Capsule()
-                .fill(Color.accentColor)
+                .fill(Color("ZuluBlue"))
                 .frame(width: 2.5, height: size * 0.38)
                 .offset(y: -size * 0.19)
                 .rotationEffect(.degrees(swing.degrees))

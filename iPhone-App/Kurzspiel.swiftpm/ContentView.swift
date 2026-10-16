@@ -43,15 +43,39 @@ struct ContentView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Kurzspiel-Längen")
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    ZGLogoBadge()
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button("Bearbeiten") { showEditor = true }
+                        .tint(.white)
                 }
             }
+            // Navy wie auf zulugolf.de, damit das ZG-Logo darauf schwebt
+            .toolbarBackground(Color.zuluNavy, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showEditor) {
                 EditView()
                     .environmentObject(store)
             }
         }
+    }
+}
+
+extension Color {
+    /// Navy der Homepage zulugolf.de (#1b2233)
+    static let zuluNavy = Color(red: 27 / 255, green: 34 / 255, blue: 51 / 255)
+}
+
+/// Das ZG-Logo von zulugolf.de in der Kopfzeile.
+private struct ZGLogoBadge: View {
+    var body: some View {
+        Image("ZGLogo")
+            .resizable()
+            .scaledToFit()
+            .frame(height: 24)
+            .accessibilityLabel("Zulu Golf")
     }
 }
 
@@ -109,7 +133,7 @@ private struct ClubRow: View {
                     .font(.subheadline.weight(.semibold))
                 Text("offen")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(Color("ZuluBlue"))
             }
         }
     }
